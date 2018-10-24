@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "ModuleTextures.h"
 #include "p2Point.h"
 #include "Box2D/Box2D/Box2D.h"
 
@@ -54,6 +55,8 @@ public:
 	//To pass INT array to a p2Vec2 array
 	b2Vec2* ConversionToVector(int* int_array, int size);
 	
+	SDL_Texture *img;
+	SDL_Rect r;
 
 private:
 

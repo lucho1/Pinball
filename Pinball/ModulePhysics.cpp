@@ -5,6 +5,7 @@
 #include "ModulePhysics.h"
 #include "p2Point.h"
 #include "math.h"
+#include "ModuleTextures.h"
 #include "CollidersArrays.h"
 
 #ifdef _DEBUG
@@ -51,8 +52,15 @@ bool ModulePhysics::Start()
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
 
-	b2Vec2 *vec_points = ConversionToVector(Monster, GetArraySize(Monster));
-	CreateChain(PIXEL_TO_METERS(x + 200), PIXEL_TO_METERS(y - 500), vec_points, GetArraySize(Monster), b2_staticBody);
+	/*b2Vec2 *vec_points = ConversionToVector(Monster, GetArraySize(Monster));
+	CreateChain(PIXEL_TO_METERS(x + 200), PIXEL_TO_METERS(y), vec_points, GetArraySize(Monster), b2_staticBody);*/
+	//MonsterMetalic[50] RoundedSquare[26] HolderLeft
+
+	b2Vec2 *flicker_right = ConversionToVector(WallLeft, GetArraySize(WallLeft));
+	CreateChain(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y), flicker_right, GetArraySize(WallLeft), b2_staticBody);
+
+	img = App->textures->Load("assets/Background.png");
+	r = { 0, 0, 1103, 1836 };
 
 	return true;
 }
@@ -77,6 +85,8 @@ update_status ModulePhysics::PreUpdate()
 
 update_status ModulePhysics::PostUpdate()
 {
+	App->renderer->Blit(img, 0, 0, &r);
+
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
