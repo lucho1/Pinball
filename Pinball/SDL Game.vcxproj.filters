@@ -70,6 +70,9 @@
     <ClInclude Include="ModuleSceneIntro.h">
       <Filter>Modules\Scenes</Filter>
     </ClInclude>
+    <ClInclude Include="CollidersArrays.h">
+      <Filter>Modules\Physics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Application.cpp">

@@ -1,6 +1,7 @@
 #pragma once
 #include "Module.h"
 #include "Globals.h"
+#include "p2Point.h"
 #include "Box2D/Box2D/Box2D.h"
 
 #define GRAVITY_X 0.0f
@@ -45,10 +46,14 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius);
 	PhysBody* CreateRectangle(int x, int y, int width, int height);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, int* points, int size, b2BodyType type, bool ARRIBA_ESPANA = true); //bool ARRIBA_ESPAÑA = closing or not closing the shape
+	PhysBody* CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA = true); //bool ARRIBA_ESPAÑA = closing or not closing the shape
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
+
+	//To pass INT array to a p2Vec2 array
+	b2Vec2* ConversionToVector(int* int_array, int size);
+	
 
 private:
 
