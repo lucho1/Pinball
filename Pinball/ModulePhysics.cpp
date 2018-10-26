@@ -59,6 +59,7 @@ bool ModulePhysics::Start()
 	CreateChain(0, 0, mons_met, GetArraySize(MonsterMetalic), b2_staticBody); //4
 	CreateChain(0, 0, jackpot, GetArraySize(Jackpot), b2_staticBody); //6
 
+
 	//Pills
 	CreateChain(0, 0, pill1, GetArraySize(Pill1), b2_staticBody); //16
 	CreateChain(0, 0, pill2, GetArraySize(Pill2), b2_staticBody); //7
@@ -81,9 +82,9 @@ bool ModulePhysics::Start()
 	RFlickerJoint.Initialize(RFlicker->body, RHolder->body, RFlicker->body->GetWorldCenter());
 
 	//RFlickerJoint.localAnchorA.Set(RFlicker->body->GetPosition().x, RFlicker->body->GetPosition().y); //Set Anchorage Point
-	RFlickerJoint.localAnchorA.Set(PIXEL_TO_METERS(1631), PIXEL_TO_METERS(684)); //Set Anchorage Point
+	RFlickerJoint.localAnchorA.Set(1631, 684); //Set Anchorage Point
 	//RFlickerJoint.localAnchorB.Set(RHolder->body->GetPosition().x, RHolder->body->GetPosition().y);
-	RFlickerJoint.localAnchorB.Set(PIXEL_TO_METERS(1631), PIXEL_TO_METERS(684));
+	RFlickerJoint.localAnchorB.Set(1631, 684);
 	world->CreateJoint(&RFlickerJoint); //Create Joint in the world
 	
 	//RFlickerJoint.enableLimit = true;
@@ -93,19 +94,6 @@ bool ModulePhysics::Start()
 	App->physics->RFlickerJoint.maxMotorTorque = 10.0f;
 	App->physics->RFlickerJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
 
-	//Left Joint Holder-Flicker
-	PhysBody* LHolder = CreateChain(0, 0, holder_left, GetArraySize(HolderLeft), b2_staticBody); //10
-	PhysBody* LFlicker = CreateChain(0, 0, flicker_left, GetArraySize(FlickerLeft), b2_dynamicBody); //15
-	LFlickerJoint.Initialize(LFlicker->body, LHolder->body, LFlicker->body->GetWorldCenter());
-	
-	LFlickerJoint.localAnchorA.Set(LFlicker->body->GetPosition().x, LFlicker->body->GetPosition().y); //Set Anchorage points
-	RFlickerJoint.localAnchorB.Set(LHolder->body->GetPosition().x, LHolder->body->GetPosition().y);
-	world->CreateJoint(&LFlickerJoint); //Create Joint in the world
-
-	LFlickerJoint.enableLimit = true;
-	LFlickerJoint.lowerAngle = -45 * DEGTORAD;
-	LFlickerJoint.upperAngle = 45 * DEGTORAD;
-
 	float trans = 1 - SCREEN_SIZE;
 	//Big Balls
 	CreateCircle(291, 175, 167 * 0.18, b2_staticBody); //Right
@@ -114,7 +102,6 @@ bool ModulePhysics::Start()
 
 	//Trampoline
 	CreateRectangle(1685*trans, 1699, 75*trans, 10, b2_staticBody); //1699 = RealY * (2 - SCREEN_SIZE) Aprox
-
 	return true;
 }
 

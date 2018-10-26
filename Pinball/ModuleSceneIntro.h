@@ -18,14 +18,13 @@ public:
 	void OnCollision(PhysBody* bodyA, PhysBody* bodyB);
 
 public:
+
 	p2List<PhysBody*> circles;
 	p2List<PhysBody*> boxes;
-	p2List<PhysBody*> ricks;
 	p2List<PhysBody*> curve;
 
 	SDL_Texture* circle;
 	SDL_Texture* box;
-	SDL_Texture* rick;
 	uint bonus_fx;
 
 	SDL_Texture* img;
