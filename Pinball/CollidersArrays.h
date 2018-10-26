@@ -1,6 +1,8 @@
 #ifndef _COLLIDERSARRAYS_H_
 #define _COLLIDERSARRAYS_H_
 
+#include "Application.h"
+
 #define INT_PIVOT_X 0
 #define INT_PIVOT_Y 0
 #define FLOAT_PIVOT_X 0.00000f
@@ -8,37 +10,23 @@
 
 template<typename T>
 ////template argument deduction
-
+//Get int array size
 int GetArraySize(T&arr1) { //Passing the array by reference 
-
 	return sizeof(arr1) / sizeof(arr1[0]); //Correctly returns the size of 'arr1'
 }
 
-//Example For Collider
-int points[38] = {
-	70, 666,
-	80, 637,
-	94, 617,
-	114, 599,
-	135, 584,
-	162, 572,
-	192, 568,
-	234, 573,
-	265, 579,
-	287, 589,
-	306, 607,
-	314, 625,
-	319, 639,
-	321, 664,
-	346, 526,
-	177, 457,
-	100, 524,
-	63, 587,
-	45, 629
-};
+//Conversion to vec
+b2Vec2* ConversionToVector(int* int_array, int size) {
+	b2Vec2 *aux = new b2Vec2[size];
+	for (uint i = 0; i < size; ++i) {
+		aux[i].x = PIXEL_TO_METERS(int_array[i * 2]);
+		aux[i].y = PIXEL_TO_METERS(int_array[i * 2 + 1]);
+	}
+	return aux;
+}
 
 //MONSTER COLLIDERS
-int Monster[194] = {
+int Monster[194] = { 
 	177, 765,
 	191, 788,
 	197, 797,
@@ -139,7 +127,7 @@ int Monster[194] = {
 };
 
 //RED COLLIDERS
-int RightRed[42] = {
+int RightRed[42] = { //2
 	866, 1297,
 	866, 1285,
 	866, 1278,
@@ -162,7 +150,7 @@ int RightRed[42] = {
 	866, 1484,
 	866, 1326
 };
-int LeftRed[42] = {
+int LeftRed[42] = { //3
 	187, 1275,
 	183, 1271,
 	180, 1270,
@@ -187,7 +175,7 @@ int LeftRed[42] = {
 };
 
 //LO METALICO DEL MONTSTRUO
-int MonsterMetalic[50] = {
+int MonsterMetalic[50] = { //4
 	283, 769,
 	449, 769,
 	452, 768,
@@ -216,7 +204,7 @@ int MonsterMetalic[50] = {
 };
 
 //UFO BUTTON
-int UfoButton[22] = {
+int UfoButton[22] = { //5
 	336, 770,
 	285, 770,
 	285, 806,
@@ -231,7 +219,7 @@ int UfoButton[22] = {
 };
 
 //JACKPOT
-int Jackpot[70] = {
+int Jackpot[70] = { //6
 	277, 184,
 	322, 196,
 	325, 198,
@@ -270,7 +258,7 @@ int Jackpot[70] = {
 };
 
 //PILL COLLIDER
-int Pill[60] = {
+int Pill2[60] = {
 	544, 271,
 	544, 260,
 	543, 255,
@@ -614,4 +602,110 @@ int FlickerLeft[56] = {
 	451, 1669,
 	339, 1610
 };
+
+//Other Pills
+int Pill1[44] = {
+	383, 290,
+	383, 234,
+	384, 230,
+	386, 226,
+	388, 223,
+	391, 220,
+	395, 217,
+	399, 215,
+	402, 214,
+	418, 214,
+	423, 216,
+	428, 218,
+	432, 222,
+	434, 226,
+	436, 230,
+	437, 234,
+	437, 303,
+	436, 306,
+	434, 309,
+	431, 312,
+	404, 328,
+	383, 293
+};
+int Pill3[52] = {
+	655, 269,
+	655, 260,
+	654, 255,
+	653, 252,
+	650, 247,
+	646, 244,
+	642, 242,
+	638, 240,
+	621, 240,
+	618, 241,
+	613, 243,
+	609, 246,
+	605, 250,
+	603, 254,
+	602, 257,
+	602, 330,
+	604, 335,
+	608, 340,
+	612, 344,
+	619, 347,
+	637, 347,
+	642, 345,
+	648, 341,
+	652, 336,
+	655, 329,
+	655, 277
+};
+int Pill4[54] = {
+	711, 240,
+	711, 231,
+	714, 225,
+	717, 221,
+	723, 217,
+	729, 215,
+	744, 215,
+	750, 216,
+	755, 218,
+	759, 222,
+	761, 226,
+	763, 232,
+	763, 240,
+	763, 305,
+	762, 309,
+	759, 314,
+	756, 317,
+	752, 320,
+	747, 322,
+	743, 323,
+	728, 323,
+	724, 321,
+	720, 318,
+	716, 314,
+	713, 309,
+	711, 304,
+	711, 243
+};
+
+//Convert all INT arrays to Vector
+b2Vec2 *mons = ConversionToVector(Monster, GetArraySize(Monster)); //1
+b2Vec2 *rightred = ConversionToVector(RightRed, GetArraySize(RightRed)); //2
+b2Vec2 *leftred = ConversionToVector(LeftRed, GetArraySize(RightRed)); //3
+b2Vec2 *mons_met = ConversionToVector(MonsterMetalic, GetArraySize(MonsterMetalic)); //4
+b2Vec2 *UfoButton_vec = ConversionToVector(UfoButton, GetArraySize(UfoButton)); //5
+b2Vec2 *jackpot = ConversionToVector(Jackpot, GetArraySize(Jackpot)); //6
+b2Vec2 *pill2 = ConversionToVector(Pill2, GetArraySize(Pill2)); //7
+b2Vec2 *arrow = ConversionToVector(Arrow, GetArraySize(Arrow)); //8
+b2Vec2 *rounded_square = ConversionToVector(RoundedSquare, GetArraySize(RoundedSquare)); //9
+b2Vec2 *holder_left = ConversionToVector(HolderLeft, GetArraySize(HolderLeft)); //10
+b2Vec2 *holder_right = ConversionToVector(HolderRight, GetArraySize(HolderRight)); //11
+b2Vec2 *wall_right = ConversionToVector(WallRight, GetArraySize(WallRight)); //12
+b2Vec2 *wall_left = ConversionToVector(WallLeft, GetArraySize(WallLeft)); //13
+b2Vec2 *flicker_right = ConversionToVector(FlickerRight, GetArraySize(FlickerRight)); //14
+b2Vec2 *flicker_left = ConversionToVector(FlickerLeft, GetArraySize(FlickerLeft)); //15
+
+b2Vec2 *pill1 = ConversionToVector(Pill1, GetArraySize(Pill1)); //16
+b2Vec2 *pill3 = ConversionToVector(Pill3, GetArraySize(Pill3)); //17
+b2Vec2 *pill4 = ConversionToVector(Pill4, GetArraySize(Pill4)); //18
+
+
 #endif

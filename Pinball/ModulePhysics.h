@@ -44,8 +44,8 @@ public:
 	update_status PostUpdate();
 	bool CleanUp();
 
-	PhysBody* CreateCircle(int x, int y, int radius);
-	PhysBody* CreateRectangle(int x, int y, int width, int height);
+	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType type = b2_dynamicBody);
+	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type = b2_dynamicBody);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
 	PhysBody* CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA = true); //bool ARRIBA_ESPAÑA = closing or not closing the shape
 
@@ -55,8 +55,8 @@ public:
 	//To pass INT array to a p2Vec2 array
 	b2Vec2* ConversionToVector(int* int_array, int size);
 	
-	SDL_Texture *img;
-	SDL_Rect r;
+	b2RevoluteJointDef LFlickerJoint;
+	b2RevoluteJointDef RFlickerJoint;
 
 private:
 

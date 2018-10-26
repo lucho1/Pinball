@@ -48,27 +48,80 @@ bool ModulePhysics::Start()
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
 
-	// big static circle as "ground" in the middle of the screen
 	int x = SCREEN_WIDTH / 2;
 	int y = SCREEN_HEIGHT / 1.5f;
 
-	/*b2Vec2 *vec_points = ConversionToVector(Monster, GetArraySize(Monster));
-	CreateChain(PIXEL_TO_METERS(x + 200), PIXEL_TO_METERS(y), vec_points, GetArraySize(Monster), b2_staticBody);*/
-	//MonsterMetalic[50] RoundedSquare[26] HolderLeft
+	//Colliders & Body creations
+	//Game Main Colliders
+	CreateChain(0, 0, mons, GetArraySize(Monster), b2_staticBody); //1
+	CreateChain(0, 0, rightred, GetArraySize(RightRed), b2_staticBody); //2
+	CreateChain(0, 0, leftred, GetArraySize(LeftRed), b2_staticBody); //3
+	CreateChain(0, 0, mons_met, GetArraySize(MonsterMetalic), b2_staticBody); //4
+	CreateChain(0, 0, jackpot, GetArraySize(Jackpot), b2_staticBody); //6
 
-	b2Vec2 *flicker_right = ConversionToVector(WallLeft, GetArraySize(WallLeft));
-	CreateChain(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y), flicker_right, GetArraySize(WallLeft), b2_staticBody);
+	//Pills
+	CreateChain(0, 0, pill1, GetArraySize(Pill1), b2_staticBody); //16
+	CreateChain(0, 0, pill2, GetArraySize(Pill2), b2_staticBody); //7
+	CreateChain(0, 0, pill3, GetArraySize(Pill3), b2_staticBody); //17
+	CreateChain(0, 0, pill4, GetArraySize(Pill4), b2_staticBody); //18
 
-	img = App->textures->Load("assets/Background.png");
-	r = { 0, 0, 1103, 1836 };
+	//Buttons
+	//CreateChain(0, 0, UfoButton_vec, GetArraySize(UfoButton), b2_staticBody); //5
+	//CreateChain(0, 0, arrow, GetArraySize(Arrow), b2_staticBody); //8
+	//CreateChain(0, 0, rounded_square, GetArraySize(RoundedSquare), b2_staticBody); //9
+
+	//Walls
+	CreateChain(0, 0, wall_right, GetArraySize(WallRight), b2_staticBody); //12
+	CreateChain(0, 0, wall_left, GetArraySize(WallLeft), b2_staticBody); //13
+
+	//Create Flickers, Holders and their joints
+	//Right Joint Holder-Flicker
+	PhysBody* RHolder = CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
+	PhysBody* RFlicker = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
+	RFlickerJoint.Initialize(RFlicker->body, RHolder->body, RFlicker->body->GetWorldCenter());
+
+	//RFlickerJoint.localAnchorA.Set(RFlicker->body->GetPosition().x, RFlicker->body->GetPosition().y); //Set Anchorage Point
+	RFlickerJoint.localAnchorA.Set(PIXEL_TO_METERS(1631), PIXEL_TO_METERS(684)); //Set Anchorage Point
+	//RFlickerJoint.localAnchorB.Set(RHolder->body->GetPosition().x, RHolder->body->GetPosition().y);
+	RFlickerJoint.localAnchorB.Set(PIXEL_TO_METERS(1631), PIXEL_TO_METERS(684));
+	world->CreateJoint(&RFlickerJoint); //Create Joint in the world
+	
+	//RFlickerJoint.enableLimit = true;
+	//RFlickerJoint.lowerAngle = -45 * DEGTORAD;
+	//RFlickerJoint.upperAngle = 45 * DEGTORAD;
+	App->physics->RFlickerJoint.enableMotor = true;
+	App->physics->RFlickerJoint.maxMotorTorque = 10.0f;
+	App->physics->RFlickerJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
+
+	//Left Joint Holder-Flicker
+	PhysBody* LHolder = CreateChain(0, 0, holder_left, GetArraySize(HolderLeft), b2_staticBody); //10
+	PhysBody* LFlicker = CreateChain(0, 0, flicker_left, GetArraySize(FlickerLeft), b2_dynamicBody); //15
+	LFlickerJoint.Initialize(LFlicker->body, LHolder->body, LFlicker->body->GetWorldCenter());
+	
+	LFlickerJoint.localAnchorA.Set(LFlicker->body->GetPosition().x, LFlicker->body->GetPosition().y); //Set Anchorage points
+	RFlickerJoint.localAnchorB.Set(LHolder->body->GetPosition().x, LHolder->body->GetPosition().y);
+	world->CreateJoint(&LFlickerJoint); //Create Joint in the world
+
+	LFlickerJoint.enableLimit = true;
+	LFlickerJoint.lowerAngle = -45 * DEGTORAD;
+	LFlickerJoint.upperAngle = 45 * DEGTORAD;
+
+	float trans = 1 - SCREEN_SIZE;
+	//Big Balls
+	CreateCircle(291, 175, 167 * 0.18, b2_staticBody); //Right
+	CreateCircle(211, 190, 175 * 0.18, b2_staticBody); //Left
+	CreateCircle(269, 241, 180 * 0.18, b2_staticBody); //Down
+
+	//Trampoline
+	CreateRectangle(1685*trans, 1699, 75*trans, 10, b2_staticBody); //1699 = RealY * (2 - SCREEN_SIZE) Aprox
 
 	return true;
 }
 
 update_status ModulePhysics::PreUpdate()
 {
+	
 	world->Step(1.0f / 60.0f, 6, 2);
-
 	for(b2Contact* c = world->GetContactList(); c; c = c->GetNext())
 	{
 		if(c->GetFixtureA()->IsSensor() && c->IsTouching())
@@ -85,8 +138,7 @@ update_status ModulePhysics::PreUpdate()
 
 update_status ModulePhysics::PostUpdate()
 {
-	App->renderer->Blit(img, 0, 0, &r);
-
+	
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
 
@@ -163,10 +215,7 @@ update_status ModulePhysics::PostUpdate()
 			break;
 			}
 
-			// TODO 1: If mouse button 1 is pressed ...
-			// App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN
-			// test if the current body contains mouse position
-
+			//Mouse Joint
 			if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN) {
 
 				int mouse_x = App->input->GetMouseX();
@@ -182,10 +231,7 @@ update_status ModulePhysics::PostUpdate()
 		}
 	}
 
-	// If a body was selected we will attach a mouse joint to it
-	// so we can pull it around
-	// TODO 2: If a body was selected, create a mouse joint
-	// using mouse_joint class property
+	//More on Mouse Joint
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_DOWN && jointed_object != nullptr) {
 
 		int mouse_x = App->input->GetMouseX();
@@ -201,9 +247,6 @@ update_status ModulePhysics::PostUpdate()
 
 		mouse_joint = (b2MouseJoint*)world->CreateJoint(&def);
 	}
-
-	// TODO 3: If the player keeps pressing the mouse button, update
-	// target position and draw a red line between both anchor points
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_REPEAT && jointed_object != nullptr) {
 
 		int mouse_x = App->input->GetMouseX();
@@ -215,32 +258,30 @@ update_status ModulePhysics::PostUpdate()
 		float32 obj_pos_x = METERS_TO_PIXELS(obj_pos.x);
 		float32 obj_pos_y = METERS_TO_PIXELS(obj_pos.y); //Extracted X and Y of object attached and converted them into Pixels
 
-
-
 		mouse_joint->SetTarget(mouse_in_meters); //Set target of the jointed object (to the mouse pos)
 		App->renderer->DrawLine(mouse_x, mouse_y, obj_pos_x, obj_pos_y, 0, 0, 255, 100); //Drawing the attachment
 
 	}
 
-
-	// TODO 4: If the player releases the mouse button, destroy the joint
+	//Release Mouse Joint
 	if (App->input->GetMouseButton(SDL_BUTTON_LEFT) == KEY_UP && jointed_object != nullptr) {
 
 		world->DestroyJoint(mouse_joint);
 		mouse_joint = nullptr;
 		jointed_object = nullptr;
+		
 	}
-
 
 	return UPDATE_CONTINUE;
 }
 
 
 //CREATE BODIES
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
 {
+
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);
@@ -261,10 +302,10 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius)
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type)
 {
 	b2BodyDef body;
-	body.type = b2_dynamicBody;
+	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
 
 	b2Body* b = world->CreateBody(&body);

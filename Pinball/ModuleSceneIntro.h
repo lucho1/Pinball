@@ -27,4 +27,7 @@ public:
 	SDL_Texture* box;
 	SDL_Texture* rick;
 	uint bonus_fx;
+
+	SDL_Texture* img;
+	SDL_Rect r;
 };
