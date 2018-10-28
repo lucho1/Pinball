@@ -8,6 +8,7 @@
 #include "ModuleTextures.h"
 #include "CollidersArrays.h"
 #include "ModuleSceneIntro.h"
+#include "ModuleAudio.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -46,8 +47,8 @@ bool ModulePhysics::Start()
 
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
+	soundfx = App->audio->LoadFx("assets/SOUNDS/Hit.wav");
 	
-
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
 	ground = world->CreateBody(&bd);
@@ -539,122 +540,156 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	//Light1
 	if (physA->Button == Button1 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light1 = true;
+		App->audio->PlayFx(soundfx,1);
 	}
 	if (physB->Button == Button1 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light1 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh2
 	if (physA->Button == Button2 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light2 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button2 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light2 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh3
 	if (physA->Button == Button3 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light3 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button3 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light3 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh4
 	if (physA->Button == Button4 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light4 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button4 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light4 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh5
 	if (physA->Button == Button5 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light5 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button5 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light5 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh6
 	if (physA->Button == Button6 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light6 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button6 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light6 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh7
 	if (physA->Button == Button7 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light7 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button7 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light7 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh8
 	if (physA->Button == Button8 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light8 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button8 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light8 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh24
 	if (physA->Button == Button24 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light24 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button24 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light24 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Ligh25
 	if (physA->Button == Button25 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light25 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button25 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light25 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	
 	//Ligh26
 	if (physA->Button == Button26 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light26 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button26 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light26 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Light27
 	if (physA->Button == Button27 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light27 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button27 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light27 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//BUTTON TURN OFF LIGHTS
 	if (physA->Button == ButtonTurnOffLights && physB->Type == PLAYER_BALL) {
 		App->scene_intro->TurnOffAll = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == ButtonTurnOffLights && physA->Type == PLAYER_BALL) {
 		App->scene_intro->TurnOffAll = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Light12
 	if (physA->Button == Button12 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light12 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button12 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light12 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Light13
 	if (physA->Button == Button13 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light13 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button13 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light13 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Light14
 	if (physA->Button == Button14 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light14 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button14 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light14 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	//Light15
 	if (physA->Button == Button15 && physB->Type == PLAYER_BALL) {
 		App->scene_intro->Light15 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	if (physB->Button == Button15 && physA->Type == PLAYER_BALL) {
 		App->scene_intro->Light15 = true;
+		App->audio->PlayFx(soundfx, 1);
 	}
 	
 }

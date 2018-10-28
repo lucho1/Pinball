@@ -23,7 +23,7 @@ bool ModuleSceneIntro::Start()
 
 	App->renderer->camera.x = App->renderer->camera.y = 0;
 
-	circle = App->textures->Load("pinball/wheel3.png"); 
+	circle = App->textures->Load("pinball/wheel4.png"); 
 	box = App->textures->Load("pinball/crate.png");
 	bonus_fx = App->audio->LoadFx("pinball/bonus.wav");
 
@@ -114,6 +114,7 @@ bool ModuleSceneIntro::Start()
      Light39 = false;
 	 Light40 = false;
 	 circlecreated = false;
+	 App->audio->PlayMusic("assets/SOUNDS/AlienMusic.wav", 1.0);
 	return ret;
 }
 
@@ -133,6 +134,8 @@ bool ModuleSceneIntro::CleanUp()
 // Update: draw background
 update_status ModuleSceneIntro::Update()
 {
+
+	
 	if (TurnOffAll) {
 		Light1 = false;
 		Light2 = false;
@@ -181,6 +184,7 @@ update_status ModuleSceneIntro::Update()
 	//light 1,2,3,4,5
 	if (Light1)
 	App->renderer->Blit(PinkButton, 7, 1032, &RLight1);
+	
 	if (Light2)
 	App->renderer->Blit(PinkButton, 7, 966, &RLight2);
 	if (Light3)

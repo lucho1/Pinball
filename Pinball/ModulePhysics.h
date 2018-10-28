@@ -79,7 +79,7 @@ private:
 	b2Body* ground;
 
 public:
-
+	int soundfx;
 //USED TO KNOW IF THE BALL HAS COLLIDED WITH A COLLIDER THANK OBJECT
 	bool EffectiveCollision;
 
