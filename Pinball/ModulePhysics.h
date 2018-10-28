@@ -55,8 +55,8 @@ public:
 	//To pass INT array to a p2Vec2 array
 	b2Vec2* ConversionToVector(int* int_array, int size);
 	
-	b2RevoluteJointDef LFlickerJoint;
-	b2RevoluteJointDef RFlickerJoint;
+	b2RevoluteJointDef LFlipperJoint;
+	b2RevoluteJointDef RFlipperJoint;
 
 private:
 
@@ -65,4 +65,6 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body *jointed_object;
 	b2Body* ground;
+	PhysBody* RFlipper = nullptr;
+	PhysBody* RMotor = nullptr;
 };

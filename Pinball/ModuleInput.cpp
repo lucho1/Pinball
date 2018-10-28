@@ -1,6 +1,7 @@
 #include "Globals.h"
 #include "Application.h"
 #include "ModuleInput.h"
+#include "ModuleRender.h"
 
 #include "SDL\include\SDL.h"
 
@@ -36,6 +37,7 @@ bool ModuleInput::Init()
 // Called every draw update
 update_status ModuleInput::PreUpdate()
 {
+
 	SDL_PumpEvents();
 
 	const Uint8* keys = SDL_GetKeyboardState(NULL);
@@ -59,8 +61,8 @@ update_status ModuleInput::PreUpdate()
 	}
 
 	Uint32 buttons = SDL_GetMouseState(&mouse_x, &mouse_y);
-	mouse_x /= SCREEN_SIZE;
-	mouse_y /= SCREEN_SIZE;
+	mouse_x;
+	mouse_y += -(App->renderer->camera.y);
 
 	for(int i = 0; i < MAX_MOUSE_BUTTONS; ++i)
 	{

@@ -76,23 +76,40 @@ bool ModulePhysics::Start()
 	CreateChain(0, 0, wall_left, GetArraySize(WallLeft), b2_staticBody); //13
 
 	//Create Flickers, Holders and their joints
-	//Right Joint Holder-Flicker
-	PhysBody* RHolder = CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
-	PhysBody* RFlicker = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
-	RFlickerJoint.Initialize(RFlicker->body, RHolder->body, RFlicker->body->GetWorldCenter());
+	CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
 
-	//RFlickerJoint.localAnchorA.Set(RFlicker->body->GetPosition().x, RFlicker->body->GetPosition().y); //Set Anchorage Point
-	RFlickerJoint.localAnchorA.Set(1631, 684); //Set Anchorage Point
-	//RFlickerJoint.localAnchorB.Set(RHolder->body->GetPosition().x, RHolder->body->GetPosition().y);
-	RFlickerJoint.localAnchorB.Set(1631, 684);
-	world->CreateJoint(&RFlickerJoint); //Create Joint in the world
+	//Right Joint Holder-Flicker
+	//RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
+	b2BodyDef FlipBody;
+	FlipBody.type = b2_dynamicBody;
+	b2FixtureDef FlipFixture;
+	FlipFixture.density = 1.0f;
+
+	b2PolygonShape Flipper;
+	Flipper.Set(flicker_right, GetArraySize(FlickerRight));
+	FlipFixture.shape = &Flipper;
+	b2Body *FB = world->CreateBody(&FlipBody);
+	FB->CreateFixture(&FlipFixture);
+
+	RMotor = CreateCircle(258, 620, 10, b2_staticBody);
+
+	RFlipperJoint.Initialize(RFlipper->body, RMotor->body, RMotor->body->GetWorldCenter());
+	RFlipperJoint.collideConnected = false;
+
+	RFlipper->listener = this;
+
+	App->physics->RFlipperJoint.enableMotor = true;
+	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
+	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD; //90 degrees per second
+
+	//Set Anchorage Point
+	(b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint); //Create Joint in the world
 	
+
+
 	//RFlickerJoint.enableLimit = true;
 	//RFlickerJoint.lowerAngle = -45 * DEGTORAD;
 	//RFlickerJoint.upperAngle = 45 * DEGTORAD;
-	App->physics->RFlickerJoint.enableMotor = true;
-	App->physics->RFlickerJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlickerJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
 
 	float trans = 1 - SCREEN_SIZE;
 	//Big Balls
@@ -210,6 +227,13 @@ update_status ModulePhysics::PostUpdate()
 
 				b2Vec2 mouse_pos(PIXEL_TO_METERS(mouse_x), PIXEL_TO_METERS(mouse_y));
 
+				//for (b2Fixture* fl = RFlipper->body->GetFixtureList(); fl; fl = fl->GetNext())
+				//{
+				//	if (fl->TestPoint(mouse_pos)) {
+				//		jointed_object = RFlipper->body;
+				//		break;
+				//	}
+				//}
 				if (f->TestPoint(mouse_pos)) {
 					jointed_object = f->GetBody();
 					break;
@@ -273,24 +297,27 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
 
 	b2Body* b = world->CreateBody(&body);
 
+	
 	b2CircleShape shape;
-	shape.m_radius = PIXEL_TO_METERS(radius);
+	shape.m_radius = PIXEL_TO_METERS(radius); //*SCREEN_SIZE
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
 
+	
 	b->CreateFixture(&fixture);
-
+	
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
 	b->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-
+	pbody->width = pbody->height = radius; //*SCREEN_SIZE
+	//b->CacadeVaca(body.position.x, body.position.y);
 	return pbody;
 }
 
 PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type)
 {
+
 	b2BodyDef body;
 	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -351,15 +378,16 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertice
 	b2Body* b = world->CreateBody(&body);
 
 	b2ChainShape shape;
-
+	
 	if (ARRIBA_ESPANA)
 		shape.CreateLoop(vertices, vertices_size / 2);
 	else
 		shape.CreateChain(vertices, vertices_size / 2);
-	
+
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-
+	fixture.density = 1.0f;
+	
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();

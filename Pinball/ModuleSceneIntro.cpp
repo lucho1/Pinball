@@ -53,8 +53,9 @@ update_status ModuleSceneIntro::Update()
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
 	
-		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25));
+		circles.add(App->physics->CreateCircle(App->input->GetMouseX(),App->input->GetMouseY(), 25));
 		circles.getLast()->data->listener = this;
+		LOG("MouseX: %i MouseY: %i", App->input->GetMouseX(), App->input->GetMouseY());
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)
