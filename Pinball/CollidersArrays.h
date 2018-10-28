@@ -24,7 +24,14 @@ b2Vec2* ConversionToVector(int* int_array, int size) {
 	}
 	return aux;
 }
-
+//TRAMPOLINE PROPULSOR
+int TrampolineChain[10] = {
+	1024, 1724,
+	1024, 1795,
+	1061, 1795,
+	1061, 1724,
+	1025, 1724
+};
 //MONSTER COLLIDERS
 int Monster[194] = { 
 	177, 765,
@@ -702,6 +709,8 @@ b2Vec2 *wall_right = ConversionToVector(WallRight, GetArraySize(WallRight)); //1
 b2Vec2 *wall_left = ConversionToVector(WallLeft, GetArraySize(WallLeft)); //13
 b2Vec2 *flicker_right = ConversionToVector(FlickerRight, GetArraySize(FlickerRight)); //14
 b2Vec2 *flicker_left = ConversionToVector(FlickerLeft, GetArraySize(FlickerLeft)); //15
+b2Vec2 *TrampolineChainVec = ConversionToVector(TrampolineChain, GetArraySize(TrampolineChain)); // 10
+
 
 b2Vec2 *pill1 = ConversionToVector(Pill1, GetArraySize(Pill1)); //16
 b2Vec2 *pill3 = ConversionToVector(Pill3, GetArraySize(Pill3)); //17

@@ -57,7 +57,7 @@ struct b2Vec2
 
 	/// Construct using coordinates.
 	b2Vec2(float32 x, float32 y) : x(x), y(y) {}
-
+	
 	b2Vec2(int x, int y) : x(x), y(y) {}
 
 	/// Set this vector to all zeros.
