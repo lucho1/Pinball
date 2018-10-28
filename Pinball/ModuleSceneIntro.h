@@ -109,6 +109,9 @@ public:
 	bool Light40;
 	bool TurnOffAll;
 	bool circlecreated;
+
+	bool downpulsed= false;
+	float vel = 0;
 public:
 	SDL_Rect RLight1;
 	SDL_Rect RLight2;

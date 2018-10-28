@@ -232,14 +232,14 @@ update_status ModuleSceneIntro::Update()
 	{
 		boxes.add(App->physics->CreateRectangle(App->input->GetMouseX(), App->input->GetMouseY(), 100, 50));
 	}
-
+	p2List_item<PhysBody*>* c = circles.getFirst();
 	//TRAMPOLIN IMPUT 1780
 	if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT ){
 		if (!Spiral.Bottom) {
 			Spiral.y += 1;
 			if (Spiral.y >= 1780) {
 				Spiral.Bottom = true;
-				
+				Spiral.GoingUp = false;
 			}
 		}
 		
@@ -248,7 +248,11 @@ update_status ModuleSceneIntro::Update()
 		Spiral.y += Spiral.yvel;
 		if (Spiral.y <= 1710) {
 			Spiral.y = 1710;
-			Spiral.Bottom = false;	
+			Spiral.Bottom = false;
+			if (circlecreated) {
+				c->data->body->SetLinearVelocity(b2Vec2(0, -50));
+			}
+			
 		}
 	}
 	
@@ -259,15 +263,16 @@ update_status ModuleSceneIntro::Update()
 	mouse.y = App->input->GetMouseY();
 
 	// All draw functions ------------------------------------------------------
-	p2List_item<PhysBody*>* c = circles.getFirst();
+	
 
 	while(c != NULL)
 	{
 		int x, y;
 		if (App->physics->EffectiveCollision) {
-			if (c->data->Type == PLAYER_BALL) {
-				
-			}
+			
+		}
+		if (c->data->Type == PLAYER_BALL) {
+			
 		}
 		c->data->GetPosition(x, y);
 		App->renderer->Blit(circle, x, y, NULL, 1.0f, c->data->GetRotation());
@@ -308,7 +313,7 @@ void ModuleSceneIntro::OnCollision(PhysBody* bodyA, PhysBody* bodyB)
 {
 	if (bodyA->Button != Buttonminus1 && bodyB->Button != Buttonminus1) {
 		if (bodyA->Type == PLAYER_BALL && bodyB->Button == Button0) {
-			App->audio->PlayFx(bonus_fx);
+			//App->audio->PlayFx(bonus_fx);
 		}
 
 	}
