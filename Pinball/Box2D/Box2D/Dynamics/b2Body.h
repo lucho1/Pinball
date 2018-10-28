@@ -87,7 +87,8 @@ enum b2Button{
 	Button37,
 	Button38,
 	Button39,
-	Button40
+	Button40,
+	ButtonTurnOffLights
 };
 
 /// A body definition holds all the data needed to construct a rigid body.

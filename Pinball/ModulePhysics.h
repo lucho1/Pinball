@@ -16,7 +16,7 @@
 
 enum PhysType {
 	PLAYER_BALL,
-	
+	GAME_CIRCLE
 };
 
 // Small class to return to other modules to track position and rotation of physics bodies
@@ -59,8 +59,8 @@ public:
 	PhysBody* CreateCircle(int x, int y, int radius, b2BodyType type = b2_dynamicBody,bool playerball = false);
 	    
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type = b2_dynamicBody,b2Button button_ = Button0);
-	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA = true, b2Button BUTTON = Buttonminus1); //bool ARRIBA_ESPAÑA = closing or not closing the shape
+	PhysBody* CreateRectangleSensor(int x, int y, int width, int height, b2Button BUTTON);
+	PhysBody* CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type,float restitution, bool ARRIBA_ESPANA = true, b2Button BUTTON = Buttonminus1); //bool ARRIBA_ESPAÑA = closing or not closing the shape
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -90,7 +90,7 @@ private:
 	b2Body* ground;
 
 public:
-
+	int soundfx;
 //USED TO KNOW IF THE BALL HAS COLLIDED WITH A COLLIDER THANK OBJECT
 	bool EffectiveCollision;
 

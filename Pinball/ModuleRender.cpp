@@ -4,6 +4,8 @@
 #include "ModuleRender.h"
 #include "ModuleInput.h"
 #include <math.h>
+#include "ModulePhysics.h"
+#include "ModuleSceneIntro.h"
 
 ModuleRender::ModuleRender(Application* app, bool start_enabled) : Module(app, start_enabled)
 {
@@ -51,7 +53,7 @@ update_status ModuleRender::PreUpdate()
 // Update: debug camera
 update_status ModuleRender::Update()
 {
-	int speed = 15;
+	/*int speed = 15;
 
 	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		App->renderer->camera.y += speed;
@@ -65,6 +67,28 @@ update_status ModuleRender::Update()
 	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		App->renderer->camera.x -= speed;
 	
+	FollowBall();*/
+	
+		/*if (camera.y <= 0) {
+			if (App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT) {
+				camera.y += 10;
+			}
+		}
+		if (camera.y >= -670) {
+			if (App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT) {
+				camera.y -= 10;
+			}
+		}*/
+	if (camera.y <= 0) {
+		if (App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT) {
+			camera.y += 10;
+		}
+	}
+	if (camera.y >= -670) {
+		if (App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT) {
+			camera.y -= 10;
+		}
+	}
 	return UPDATE_CONTINUE;
 }
 
@@ -206,4 +230,15 @@ bool ModuleRender::DrawCircle(int x, int y, int radius, Uint8 r, Uint8 g, Uint8 
 	}
 
 	return ret;
+}
+void ModuleRender::FollowBall() {
+	if (App->scene_intro->circlecreated) {
+		if ((App->scene_intro->circles.getFirst()->data->body->GetPosition().y) > (-camera.y + camera.h)) {
+			camera.y -= App->scene_intro->circles.getFirst()->data->body->GetLinearVelocity().x;
+		}
+	}
+	
+
+	//if ((App->player->data.ypos) > (-camera.y + camera.h - bot_border))		//Move the camera upwards if the player is going up and above the top border
+	//	camera.y -= App->player->data.xvel;
 }
