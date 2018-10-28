@@ -41,8 +41,6 @@ bool ModuleSceneIntro::Start()
 	Trampoline.yvel = 0;
 
 
-	
-	
 	//LUCHO NO T'ESPANTIS S�N LES LLUMS DE TOT EL PIMBALL NOM�S PUC CONTROLAR SI ESTAN ON/OFF AMB UN PUTO BOOL. SI, M'ACABO D'ADONAR Q PODRIA HAVER FET UNA ARRAY DE BOOLS EN FIN
 	Light1 = false;
 	Light2 = false;
@@ -54,6 +52,7 @@ bool ModuleSceneIntro::Start()
 	Light8 = false;
 	Light9 = false;
 	Light10 = false;
+
 
 	return ret;
 }
@@ -76,7 +75,6 @@ update_status ModuleSceneIntro::Update()
 {
 	//BackGround of the entire game
 	App->renderer->Blit(BackGroundImg, 0, 0, &r);
-	
 
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
@@ -154,15 +152,11 @@ update_status ModuleSceneIntro::Update()
 
 	//Marco de hierro
 	App->renderer->Blit(TrampolineImg, 1004, 1695, &r);
-	
-	
-
 
 	//LIGHTS HERE MOTHERFUCKERRRR
 	Light1 = true;
 	if(Light1)
 		App->renderer->Blit(Buttonsimg, 0, 0, &RLight1);
-
 
 
 	return UPDATE_CONTINUE;

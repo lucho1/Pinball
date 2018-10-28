@@ -70,6 +70,9 @@ public:
 	bool Light8;
 	bool Light9;
 	bool Light10;
+
+	int Life = 3;
+
 public:
 	SDL_Rect RLight1;
 	

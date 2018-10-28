@@ -9,6 +9,8 @@
 #include "CollidersArrays.h"
 #include "ModuleSceneIntro.h"
 
+#include "Box2D\Box2D\Dynamics\Joints\b2RevoluteJoint.h"
+
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
 #else
@@ -70,57 +72,65 @@ bool ModulePhysics::Start()
 	CreateChain(0, 0, pill3, GetArraySize(Pill3), b2_staticBody); //17
 	CreateChain(0, 0, pill4, GetArraySize(Pill4), b2_staticBody); //18
 
-	
-
-	//Walls
-	CreateChain(0, 0, wall_right, GetArraySize(WallRight), b2_staticBody); //12
+	//Wall
 	CreateChain(0, 0, wall_left, GetArraySize(WallLeft), b2_staticBody); //13
 
 	//Create Flickers, Holders and their joints
 	CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
+	CreateChain(0, 0, holder_left, GetArraySize(HolderLeft), b2_staticBody); //11
 
 	//Right Joint Holder-Flicker
-	RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
-	/*b2BodyDef FlipBody;
-	FlipBody.type = b2_dynamicBody;
-	b2FixtureDef FlipFixture;
-	FlipFixture.density = 1.0f;
+	RFlipper = CreateRectangle(597, 1635, 160, 30, b2_dynamicBody);
+	RMotor = CreateCircle(683, 1635, 20, b2_staticBody);
 
-	b2PolygonShape Flipper;
-	Flipper.Set(flicker_right, GetArraySize(FlickerRight));
-	FlipFixture.shape = &Flipper;
-	b2Body *FB = world->CreateBody(&FlipBody);
-	FB->CreateFixture(&FlipFixture);*/
+	RFlipperJoint.bodyA = RFlipper->body;
+	RFlipperJoint.bodyB = RMotor->body;
 
-	RMotor = CreateCircle(258, 620, 10, b2_staticBody);
+	RFlipperJoint.localAnchorA.Set(-PIXEL_TO_METERS(80), 0);
+	RFlipperJoint.localAnchorB.Set(0, 0);
 
-	RFlipperJoint.Initialize(RFlipper->body, RMotor->body, RMotor->body->GetWorldCenter());
+
 	RFlipperJoint.collideConnected = false;
 
-	RFlipper->listener = this;
+	RFlipperJoint.enableLimit = true;
+	RFlipperJoint.lowerAngle = -210 * DEGTORAD;
+	RFlipperJoint.upperAngle = -160 * DEGTORAD;
 
-	App->physics->RFlipperJoint.enableMotor = true;
-	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD; //90 degrees per second
+	RFlipperJoint.maxMotorTorque = 80000.0f;
+	RFlipperJoint.motorSpeed = 0;
+	RFlipperJoint.enableMotor = true;
 
-	//Set Anchorage Point
-	(b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint); //Create Joint in the world
+	RFJoint = (b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint);
 
-	App->physics->RFlipperJoint.enableMotor = true;
-	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
+	//Left Joint Holder-Flicker
+	LFlipper = CreateRectangle(413, 1635, 160, 30, b2_dynamicBody);
+	LMotor = CreateCircle(327, 1635, 20, b2_staticBody);
 
-	//RFlickerJoint.enableLimit = true;
-	//RFlickerJoint.lowerAngle = -45 * DEGTORAD;
-	//RFlickerJoint.upperAngle = 45 * DEGTORAD;
+	LFlipperJoint.bodyA = LFlipper->body;
+	LFlipperJoint.bodyB = LMotor->body;
+	LFlipperJoint.localAnchorA.Set(-PIXEL_TO_METERS(80), 0);
+	LFlipperJoint.localAnchorB.Set(0, 0);
 
+	LFlipperJoint.collideConnected = false;
 
-	float trans = 1 - SCREEN_SIZE;
+	LFlipperJoint.enableLimit = true;
+	LFlipperJoint.lowerAngle = -20 * DEGTORAD;
+	LFlipperJoint.upperAngle = 30 * DEGTORAD;
+
+	LFlipperJoint.maxMotorTorque = 80000.0f;
+	LFlipperJoint.motorSpeed = 0;
+	LFlipperJoint.enableMotor = true;
+
+	LFJoint = (b2RevoluteJoint*)world->CreateJoint(&LFlipperJoint);
 
 	//trampoline 
-
 	PhysBody* TrampolineRocket = CreateChain(0, 0, TrampolineChainVec, GetArraySize(TrampolineChain), b2_staticBody);
 	App->scene_intro->boxes.add(TrampolineRocket);
+
+	DeadColl = CreateRectangle(0, 1900, 2000, 100, b2_staticBody);
+
+	App->physics->CreateChain(0, 0, wall_right, GetArraySize(WallRight), b2_staticBody); //13
+	App->physics->CreateChain(0, 0, downer_vec, GetArraySize(Downer), b2_staticBody, false);
 	return true;
 }
 
@@ -144,6 +154,20 @@ update_status ModulePhysics::PreUpdate()
 
 update_status ModulePhysics::PostUpdate()
 {
+	
+
+	if (App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+		RFJoint->SetMotorSpeed(-100);
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT) 
+		LFJoint->SetMotorSpeed(100);
+
+	if (App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_IDLE)
+		LFJoint->SetMotorSpeed(-100);
+	
+
+	if (RFJoint->GetJointAngle() <= RFJoint->GetLowerLimit() && App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_IDLE)
+		RFJoint->SetMotorSpeed(100);
 	
 	if (App->input->GetKey(SDL_SCANCODE_F1) == KEY_DOWN)
 		debug = !debug;
