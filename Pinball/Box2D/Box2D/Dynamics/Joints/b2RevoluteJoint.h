@@ -79,6 +79,8 @@ struct b2RevoluteJointDef : public b2JointDef
 	/// The maximum motor torque used to achieve the desired motor speed.
 	/// Usually in N-m.
 	float32 maxMotorTorque;
+
+
 };
 
 /// A revolute joint constrains two bodies to share a common point while they
@@ -137,6 +139,7 @@ public:
 
 	/// Set the maximum motor torque, usually in N-m.
 	void SetMaxMotorTorque(float32 torque);
+
 	float32 GetMaxMotorTorque() const { return m_maxMotorTorque; }
 
 	/// Get the reaction force given the inverse time step.

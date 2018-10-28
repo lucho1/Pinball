@@ -70,8 +70,6 @@ bool ModuleSceneIntro::Start()
 	Trampoline.yvel = 0;
 
 
-	
-	
 	//LUCHO NO T'ESPANTIS S�N LES LLUMS DE TOT EL PIMBALL NOM�S PUC CONTROLAR SI ESTAN ON/OFF AMB UN PUTO BOOL. SI, M'ACABO D'ADONAR Q PODRIA HAVER FET UNA ARRAY DE BOOLS EN FIN
 	Light1 = false;
 	Light2 = false;
@@ -180,7 +178,6 @@ update_status ModuleSceneIntro::Update()
 	}
 	//BackGround of the entire game
 	App->renderer->Blit(BackGroundImg, 0, 0, &r);
-
 	//light 1,2,3,4,5
 	if (Light1)
 	App->renderer->Blit(PinkButton, 7, 1032, &RLight1);
@@ -216,14 +213,14 @@ update_status ModuleSceneIntro::Update()
 	if (Light15)
 		App->renderer->Blit(PinkButtonFlipped, 850, 760 + 125, &RLight15);
 
-
 	if(App->input->GetKey(SDL_SCANCODE_1) == KEY_DOWN)
 	{
+    here:
 		circlecreated = true;
 		//circles.del(circles.getFirst());
 		circles.clear();
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 18,b2_dynamicBody,true));
-
+    
 		circles.getLast()->data->listener = this;
 		LOG("MouseX: %i MouseY: %i", App->input->GetMouseX(), App->input->GetMouseY());
 	}
@@ -290,6 +287,13 @@ update_status ModuleSceneIntro::Update()
 		c->data->GetPosition(x, y);
 		//App->renderer->Blit(box, x, y, NULL, 1.0f, c->data->GetRotation());
 		c = c->next;
+    
+    //Camera, SORRY CARLOS
+    App->renderer->camera.y = -y + 500;
+    if (y > 2000) {
+     circles.clear();
+     goto here;
+     }
 	}
 
 	//Background prepared for the trampoline and other items that are upper the ball
@@ -298,13 +302,9 @@ update_status ModuleSceneIntro::Update()
 
 	//Marco de hierro
 	App->renderer->Blit(TrampolineImg, 1004, 1695, &r);
-	
-	
-
 
 	//LIGHTS HERE MOTHERFUCKERRRR
 	
-
 
 	return UPDATE_CONTINUE;
 }

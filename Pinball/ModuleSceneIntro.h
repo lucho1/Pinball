@@ -66,7 +66,7 @@ public:
 	TrampolineData Trampoline;
 
 public:
-	//LUCHO NO T'ESPANTIS SÓN LES LLUMS DE TOT EL PIMBALL NOMÉS PUC CONTROLAR SI ESTAN ON/OFF AMB UN PUTO BOOL. SI, M'ACABO D'ADONAR Q PODRIA HAVER FET UNA ARRAY DE BOOLS EN FIN
+	//LUCHO NO T'ESPANTIS SÃ“N LES LLUMS DE TOT EL PIMBALL NOMÃ‰S PUC CONTROLAR SI ESTAN ON/OFF AMB UN PUTO BOOL. SI, M'ACABO D'ADONAR Q PODRIA HAVER FET UNA ARRAY DE BOOLS EN FIN
 	bool Light1;
 	bool Light2;
 	bool Light3;
@@ -112,6 +112,8 @@ public:
 
 	bool downpulsed= false;
 	float vel = 0;
+
+	int Life = 3;
 public:
 	SDL_Rect RLight1;
 	SDL_Rect RLight2;

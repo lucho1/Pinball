@@ -52,6 +52,7 @@ public:
 
 	bool Start();
 	update_status PreUpdate();
+	//update_status ModulePhysics::Update();
 	update_status PostUpdate();
 	bool CleanUp();
 
@@ -70,6 +71,16 @@ public:
 	b2RevoluteJointDef LFlipperJoint;
 	b2RevoluteJointDef RFlipperJoint;
 
+	b2RevoluteJoint *RFJoint;
+	b2RevoluteJoint *LFJoint;
+
+	PhysBody *DeadColl = nullptr;
+
+	PhysBody* RFlipper = nullptr;
+	PhysBody* RMotor = nullptr;
+	PhysBody* LFlipper = nullptr;
+	PhysBody* LMotor = nullptr;
+
 private:
 
 	bool debug;
@@ -86,6 +97,6 @@ public:
 //USED TO KNOW WICH IS THE CURRENT BALL
 	PhysBody* CurrentPlayerBall;
 
-	PhysBody* RFlipper = nullptr;
-	PhysBody* RMotor = nullptr;
+
+
 };
