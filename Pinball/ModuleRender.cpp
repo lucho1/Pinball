@@ -52,18 +52,18 @@ update_status ModuleRender::PreUpdate()
 update_status ModuleRender::Update()
 {
 	
-	int speed = 3;
+	int speed = 15;
 
-	if(App->input->GetKey(SDL_SCANCODE_UP) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_W) == KEY_REPEAT)
 		App->renderer->camera.y += speed;
-
-	if(App->input->GetKey(SDL_SCANCODE_DOWN) == KEY_REPEAT)
+	
+	if(App->input->GetKey(SDL_SCANCODE_S) == KEY_REPEAT)
 		App->renderer->camera.y -= speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_LEFT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_A) == KEY_REPEAT)
 		App->renderer->camera.x += speed;
 
-	if(App->input->GetKey(SDL_SCANCODE_RIGHT) == KEY_REPEAT)
+	if(App->input->GetKey(SDL_SCANCODE_D) == KEY_REPEAT)
 		App->renderer->camera.x -= speed;
 	
 	return UPDATE_CONTINUE;
