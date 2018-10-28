@@ -24,13 +24,112 @@ b2Vec2* ConversionToVector(int* int_array, int size) {
 	}
 	return aux;
 }
+//rebote botones rosas
+int ReboteRosa[10] = {
+    17, 798,
+	39, 798,
+	39, 1112,
+	16, 1112,
+	15, 808
+};
+int ReboteRosa2[10] = {
+	873, 910,
+	902, 910,
+	902, 1159,
+	872, 1159,
+	872, 911
+};
+
+//MARCIANITOS AQUI
+int Marcianito[46] = {
+	567, 423,
+	541, 422,
+	519, 431,
+	503, 440,
+	491, 454,
+	480, 472,
+	475, 490,
+	473, 509,
+	477, 526,
+	487, 543,
+	500, 556,
+	514, 567,
+	531, 572,
+	556, 576,
+	582, 572,
+	603, 560,
+	616, 544,
+	628, 520,
+	628, 495,
+	623, 471,
+	609, 448,
+	594, 433,
+	576, 426
+};
+int Marcianito2[50] = {
+	675, 564,
+	660, 574,
+	647, 590,
+	637, 604,
+	632, 626,
+	632, 650,
+	639, 668,
+	653, 683,
+	666, 692,
+	683, 702,
+	704, 706,
+	726, 705,
+	747, 699,
+	762, 687,
+	770, 676,
+	779, 653,
+	783, 631,
+	782, 614,
+	775, 599,
+	763, 583,
+	748, 569,
+	726, 557,
+	708, 555,
+	688, 557,
+	676, 564
+};
+
+int Marcianito3[52] = {
+	699, 414,
+	690, 430,
+	687, 449,
+	687, 466,
+	693, 482,
+	701, 500,
+	713, 511,
+	726, 519,
+	746, 528,
+	771, 532,
+	795, 528,
+	814, 518,
+	824, 506,
+	833, 491,
+	838, 470,
+	840, 453,
+	835, 427,
+	830, 411,
+	816, 398,
+	799, 386,
+	783, 380,
+	762, 378,
+	747, 379,
+	731, 386,
+	718, 394,
+	708, 403
+};
+
 //TRAMPOLINE PROPULSOR
 int TrampolineChain[10] = {
-	1024, 1724,
-	1024, 1795,
-	1061, 1795,
-	1061, 1724,
-	1025, 1724
+	1022, 1787,
+	1065, 1787,
+	1065, 1818,
+	1021, 1818,
+	1021, 1794
 };
 //MONSTER COLLIDERS
 int Monster[194] = { 
@@ -710,6 +809,12 @@ b2Vec2 *wall_left = ConversionToVector(WallLeft, GetArraySize(WallLeft)); //13
 b2Vec2 *flicker_right = ConversionToVector(FlickerRight, GetArraySize(FlickerRight)); //14
 b2Vec2 *flicker_left = ConversionToVector(FlickerLeft, GetArraySize(FlickerLeft)); //15
 b2Vec2 *TrampolineChainVec = ConversionToVector(TrampolineChain, GetArraySize(TrampolineChain)); // 10
+b2Vec2 *MarcianitoVec = ConversionToVector(Marcianito, GetArraySize(Marcianito)); // 10
+b2Vec2 *MarcianitoVec2 = ConversionToVector(Marcianito2, GetArraySize(Marcianito2)); // 10
+b2Vec2 *MarcianitoVec3 = ConversionToVector(Marcianito3, GetArraySize(Marcianito3)); // 10
+b2Vec2 *ReboteRosaVec = ConversionToVector(ReboteRosa, GetArraySize(ReboteRosa)); // 10
+b2Vec2 *ReboteRosaVec2 = ConversionToVector(ReboteRosa2, GetArraySize(ReboteRosa2)); // 10
+
 
 
 b2Vec2 *pill1 = ConversionToVector(Pill1, GetArraySize(Pill1)); //16

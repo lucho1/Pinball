@@ -57,30 +57,32 @@ bool ModulePhysics::Start()
 
 	//Colliders & Body creations
 	//Game Main Colliders
-	CreateChain(0, 0, mons, GetArraySize(Monster), b2_staticBody); //1
-	CreateChain(0, 0, rightred, GetArraySize(RightRed), b2_staticBody); //2
-	CreateChain(0, 0, leftred, GetArraySize(LeftRed), b2_staticBody); //3
-	CreateChain(0, 0, mons_met, GetArraySize(MonsterMetalic), b2_staticBody); //4
-	CreateChain(0, 0, jackpot, GetArraySize(Jackpot), b2_staticBody); //6
+	CreateChain(0, 0, mons, GetArraySize(Monster), b2_staticBody,Buttonminus1); //1
+	CreateChain(0, 0, rightred, GetArraySize(RightRed), b2_staticBody,1, Buttonminus1); //2
+	CreateChain(0, 0, leftred, GetArraySize(LeftRed), b2_staticBody,1, Buttonminus1); //3
+	CreateChain(0, 0, mons_met, GetArraySize(MonsterMetalic), b2_staticBody, Buttonminus1); //4
+	CreateChain(0, 0, jackpot, GetArraySize(Jackpot), b2_staticBody, Buttonminus1); //6
 
 
 	//Pills
-	CreateChain(0, 0, pill1, GetArraySize(Pill1), b2_staticBody); //16
-	CreateChain(0, 0, pill2, GetArraySize(Pill2), b2_staticBody); //7
-	CreateChain(0, 0, pill3, GetArraySize(Pill3), b2_staticBody); //17
-	CreateChain(0, 0, pill4, GetArraySize(Pill4), b2_staticBody); //18
+	CreateChain(0, 0, pill1, GetArraySize(Pill1), b2_staticBody, Buttonminus1); //16
+	CreateChain(0, 0, pill2, GetArraySize(Pill2), b2_staticBody, Buttonminus1); //7
+	CreateChain(0, 0, pill3, GetArraySize(Pill3), b2_staticBody, Buttonminus1); //17
+	CreateChain(0, 0, pill4, GetArraySize(Pill4), b2_staticBody, Buttonminus1); //18
 
-	
-
+	//Marcianitos
+	CreateChain(0, 0, MarcianitoVec, GetArraySize(Marcianito), b2_staticBody,1, Buttonminus1); //16
+	CreateChain(0, 0, MarcianitoVec2, GetArraySize(Marcianito2), b2_staticBody, 1, Buttonminus1);
+	CreateChain(0, 0, MarcianitoVec3, GetArraySize(Marcianito3), b2_staticBody, 1, Buttonminus1);
 	//Walls
-	CreateChain(0, 0, wall_right, GetArraySize(WallRight), b2_staticBody); //12
-	CreateChain(0, 0, wall_left, GetArraySize(WallLeft), b2_staticBody); //13
+	CreateChain(0, 0, wall_right, GetArraySize(WallRight), b2_staticBody, Buttonminus1); //12
+	CreateChain(0, 0, wall_left, GetArraySize(WallLeft), b2_staticBody, Buttonminus1); //13
 
 	//Create Flickers, Holders and their joints
-	CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
+	CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody, Buttonminus1); //11
 
 	//Right Joint Holder-Flicker
-	RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
+	//RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
 	/*b2BodyDef FlipBody;
 	FlipBody.type = b2_dynamicBody;
 	b2FixtureDef FlipFixture;
@@ -92,35 +94,71 @@ bool ModulePhysics::Start()
 	b2Body *FB = world->CreateBody(&FlipBody);
 	FB->CreateFixture(&FlipFixture);*/
 
-	RMotor = CreateCircle(258, 620, 10, b2_staticBody);
+	//RMotor = CreateCircle(258, 620, 10, b2_staticBody);
 
-	RFlipperJoint.Initialize(RFlipper->body, RMotor->body, RMotor->body->GetWorldCenter());
-	RFlipperJoint.collideConnected = false;
+	//RFlipperJoint.Initialize(RFlipper->body, RMotor->body, RMotor->body->GetWorldCenter());
+	//RFlipperJoint.collideConnected = false;
 
-	RFlipper->listener = this;
+	//RFlipper->listener = this;
 
-	App->physics->RFlipperJoint.enableMotor = true;
-	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD; //90 degrees per second
+	//App->physics->RFlipperJoint.enableMotor = true;
+	//App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
+	//App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD; //90 degrees per second
 
-	//Set Anchorage Point
-	(b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint); //Create Joint in the world
+	////Set Anchorage Point
+	//(b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint); //Create Joint in the world
 
-	App->physics->RFlipperJoint.enableMotor = true;
-	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
+	//App->physics->RFlipperJoint.enableMotor = true;
+	//App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
+	//App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
 
 	//RFlickerJoint.enableLimit = true;
 	//RFlickerJoint.lowerAngle = -45 * DEGTORAD;
 	//RFlickerJoint.upperAngle = 45 * DEGTORAD;
 
 
-	float trans = 1 - SCREEN_SIZE;
+	
+
+	
 
 	//trampoline 
 
-	PhysBody* TrampolineRocket = CreateChain(0, 0, TrampolineChainVec, GetArraySize(TrampolineChain), b2_staticBody);
-	App->scene_intro->boxes.add(TrampolineRocket);
+	PhysBody* TrampolineRocket = CreateChain(0, 0, TrampolineChainVec, GetArraySize(TrampolineChain), b2_staticBody,4,Buttonminus1);
+	//App->scene_intro->boxes.add(TrampolineRocket);
+	App->scene_intro->TrampolinedorXpos = 1040;
+		
+
+	//ALL RECTS FOR BUTTONS
+	//pink buttons
+	PhysBody *PinkLigh1Button = CreateRectangle(34,1082,10,57 ,b2_staticBody,Button1);
+	PhysBody *PinkLigh2Button = CreateRectangle(34, 1018, 10, 57, b2_staticBody, Button2);
+	PhysBody *PinkLigh3Button = CreateRectangle(34, 955, 10, 57, b2_staticBody, Button3);
+	PhysBody *PinkLigh4Button = CreateRectangle(34, 887, 10, 57, b2_staticBody, Button4);
+	PhysBody *PinkLigh5Button = CreateRectangle(34, 822, 10, 57, b2_staticBody, Button5);
+	//rebote del los pink buttons
+	CreateChain(0, 0, ReboteRosaVec, GetArraySize(ReboteRosa), b2_staticBody, 2, Buttonminus1); //3
+	//pink buttons left side
+
+	PhysBody *PinkLigh12Button = CreateRectangle(877, 1082 + 50, 10, 57, b2_staticBody, Button12);
+	PhysBody *PinkLigh13Button = CreateRectangle(877, 1018 + 50, 10, 57, b2_staticBody, Button13);
+	PhysBody *PinkLigh14Button = CreateRectangle(877, 955 + 50, 10, 57, b2_staticBody, Button14);
+	PhysBody *PinkLigh15Button = CreateRectangle(877, 887 + 50, 10, 57, b2_staticBody, Button15);
+	//rebote de los pink butons left side
+	CreateChain(0, 0, ReboteRosaVec2, GetArraySize(ReboteRosa2), b2_staticBody, 2, Buttonminus1); //3.
+
+	
+
+	PhysBody *PinkLigh6Button = CreateRectangle(310, 795, 45, 40, b2_staticBody, Button6);
+	PhysBody *PinkLigh7Button = CreateRectangle(370, 795, 45, 40, b2_staticBody, Button7);
+	PhysBody *PinkLigh8Button = CreateRectangle(425, 795, 45, 40, b2_staticBody, Button8);
+
+	PhysBody *PinkLigh24Button = CreateRectangle(410, 268, 56,80, b2_staticBody, Button24);
+	PhysBody *PinkLigh25Button = CreateRectangle(517, 289, 55, 80, b2_staticBody, Button25);
+	PhysBody *PinkLigh26Button = CreateRectangle(629, 289, 55, 80, b2_staticBody, Button26);
+
+	PhysBody *PinkLigh27Button = CreateRectangle(737, 270, 55, 80, b2_staticBody, Button27);
+	
+	
 	return true;
 }
 
@@ -150,6 +188,9 @@ update_status ModulePhysics::PostUpdate()
 
 	if (!debug)
 		return UPDATE_CONTINUE;
+
+	PhysBody * Trampolinebase = CreateRectangle(App->scene_intro->TrampolinedorXpos, 1724, 30, 5, b2_staticBody);
+
 
 	// Bonus code: this will iterate all objects in the world and draw the circles
 	// You need to provide your own macro to translate meters to pixels
@@ -291,6 +332,7 @@ update_status ModulePhysics::PostUpdate()
 }
 
 
+
 //CREATE BODIES
 PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type, bool playerball_)
 {
@@ -310,15 +352,19 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type,
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 100.0f;
+	fixture.friction = 0;
 
-	
+
 	b->CreateFixture(&fixture);
 	
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
 	if (playerball_) {
 	pbody->Type = PLAYER_BALL;// WE SET THE CREATED CIRCLES TO BALL TYPE USED IN FUNCTION BEGINNCONTACT()
-	
+	}
+	else if (!playerball_) {
+		pbody->Type = GAME_CIRCLE;
+		fixture.restitution = 1;
 	}
 	
 	b->SetUserData(pbody);
@@ -340,7 +386,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 100.0f;
+	fixture.density = 1.0f;
 
 	b->CreateFixture(&fixture);
 
@@ -354,7 +400,7 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height)
+PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int height, b2Button BUTTON)
 {
 	b2BodyDef body;
 	body.type = b2_staticBody;
@@ -382,7 +428,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 
 //Chain from v2 vertex Program to create colliders You can close it or not with ARRIBA_ESPANA bool
-PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA, b2Button BUTTON) //bool ARRIBA_ESPAÑA = closing or not closing the shape
+PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, float restitution_, bool ARRIBA_ESPANA, b2Button BUTTON) //bool ARRIBA_ESPAÑA = closing or not closing the shape
 {
 	b2BodyDef body;
 	body.type = type;
@@ -400,7 +446,9 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertice
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
 	fixture.density = 1.0f;
-	
+	if (restitution_ != 0) {
+		fixture.restitution = restitution_;
+	}
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
@@ -488,17 +536,125 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
 
-	/*if (physA->Type == PLAYER_BALL && physB->Type == GAME_RECTANGLE)  {
-		EffectiveCollision = true;
-	
+	//Light1
+	if (physA->Button == Button1 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light1 = true;
 	}
-	else if (physA->Type == GAME_RECTANGLE && physB->Type == PLAYER_BALL) {
-		EffectiveCollision = true;
-		
-	}else if()
-		EffectiveCollision = false;*/
-	if (physA->Button == Button0 || physB->Button == Button0) {
-
+	if (physB->Button == Button1 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light1 = true;
+	}
+	//Ligh2
+	if (physA->Button == Button2 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light2 = true;
+	}
+	if (physB->Button == Button2 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light2 = true;
+	}
+	//Ligh3
+	if (physA->Button == Button3 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light3 = true;
+	}
+	if (physB->Button == Button3 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light3 = true;
+	}
+	//Ligh4
+	if (physA->Button == Button4 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light4 = true;
+	}
+	if (physB->Button == Button4 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light4 = true;
+	}
+	//Ligh5
+	if (physA->Button == Button5 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light5 = true;
+	}
+	if (physB->Button == Button5 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light5 = true;
+	}
+	//Ligh6
+	if (physA->Button == Button6 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light6 = true;
+	}
+	if (physB->Button == Button6 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light6 = true;
+	}
+	//Ligh7
+	if (physA->Button == Button7 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light7 = true;
+	}
+	if (physB->Button == Button7 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light7 = true;
+	}
+	//Ligh8
+	if (physA->Button == Button8 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light8 = true;
+	}
+	if (physB->Button == Button8 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light8 = true;
+	}
+	//Ligh24
+	if (physA->Button == Button24 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light24 = true;
+	}
+	if (physB->Button == Button24 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light24 = true;
+	}
+	//Ligh25
+	if (physA->Button == Button25 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light25 = true;
+	}
+	if (physB->Button == Button25 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light25 = true;
+	}
+	
+	//Ligh26
+	if (physA->Button == Button26 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light26 = true;
+	}
+	if (physB->Button == Button26 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light26 = true;
+	}
+	//Light27
+	if (physA->Button == Button27 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light27 = true;
+	}
+	if (physB->Button == Button27 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light27 = true;
+	}
+	//BUTTON TURN OFF LIGHTS
+	if (physA->Button == ButtonTurnOffLights && physB->Type == PLAYER_BALL) {
+		App->scene_intro->TurnOffAll = true;
+	}
+	if (physB->Button == ButtonTurnOffLights && physA->Type == PLAYER_BALL) {
+		App->scene_intro->TurnOffAll = true;
+	}
+	//Light12
+	if (physA->Button == Button12 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light12 = true;
+	}
+	if (physB->Button == Button12 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light12 = true;
+	}
+	//Light13
+	if (physA->Button == Button13 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light13 = true;
+	}
+	if (physB->Button == Button13 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light13 = true;
+	}
+	//Light14
+	if (physA->Button == Button14 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light14 = true;
+	}
+	if (physB->Button == Button14 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light14 = true;
+	}
+	//Light15
+	if (physA->Button == Button15 && physB->Type == PLAYER_BALL) {
+		App->scene_intro->Light15 = true;
+	}
+	if (physB->Button == Button15 && physA->Type == PLAYER_BALL) {
+		App->scene_intro->Light15 = true;
 	}
 	
 }
