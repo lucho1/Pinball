@@ -7,6 +7,7 @@
 #include "math.h"
 #include "ModuleTextures.h"
 #include "CollidersArrays.h"
+#include "ModuleSceneIntro.h"
 
 #ifdef _DEBUG
 #pragma comment( lib, "Box2D/libx86/Debug/Box2D.lib" )
@@ -41,8 +42,11 @@ bool ModulePhysics::Start()
 {
 	LOG("Creating Physics 2D environment");
 
+	EffectiveCollision = false;
+
 	world = new b2World(b2Vec2(GRAVITY_X, -GRAVITY_Y));
 	world->SetContactListener(this);
+	
 
 	// needed to create joints like mouse joint
 	b2BodyDef bd;
@@ -66,42 +70,57 @@ bool ModulePhysics::Start()
 	CreateChain(0, 0, pill3, GetArraySize(Pill3), b2_staticBody); //17
 	CreateChain(0, 0, pill4, GetArraySize(Pill4), b2_staticBody); //18
 
-	//Buttons
-	//CreateChain(0, 0, UfoButton_vec, GetArraySize(UfoButton), b2_staticBody); //5
-	//CreateChain(0, 0, arrow, GetArraySize(Arrow), b2_staticBody); //8
-	//CreateChain(0, 0, rounded_square, GetArraySize(RoundedSquare), b2_staticBody); //9
+	
 
 	//Walls
 	CreateChain(0, 0, wall_right, GetArraySize(WallRight), b2_staticBody); //12
 	CreateChain(0, 0, wall_left, GetArraySize(WallLeft), b2_staticBody); //13
 
 	//Create Flickers, Holders and their joints
-	//Right Joint Holder-Flicker
-	PhysBody* RHolder = CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
-	PhysBody* RFlicker = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
-	RFlickerJoint.Initialize(RFlicker->body, RHolder->body, RFlicker->body->GetWorldCenter());
+	CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
 
-	//RFlickerJoint.localAnchorA.Set(RFlicker->body->GetPosition().x, RFlicker->body->GetPosition().y); //Set Anchorage Point
-	RFlickerJoint.localAnchorA.Set(1631, 684); //Set Anchorage Point
-	//RFlickerJoint.localAnchorB.Set(RHolder->body->GetPosition().x, RHolder->body->GetPosition().y);
-	RFlickerJoint.localAnchorB.Set(1631, 684);
-	world->CreateJoint(&RFlickerJoint); //Create Joint in the world
-	
+	//Right Joint Holder-Flicker
+	RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
+	/*b2BodyDef FlipBody;
+	FlipBody.type = b2_dynamicBody;
+	b2FixtureDef FlipFixture;
+	FlipFixture.density = 1.0f;
+
+	b2PolygonShape Flipper;
+	Flipper.Set(flicker_right, GetArraySize(FlickerRight));
+	FlipFixture.shape = &Flipper;
+	b2Body *FB = world->CreateBody(&FlipBody);
+	FB->CreateFixture(&FlipFixture);*/
+
+	RMotor = CreateCircle(258, 620, 10, b2_staticBody);
+
+	RFlipperJoint.Initialize(RFlipper->body, RMotor->body, RMotor->body->GetWorldCenter());
+	RFlipperJoint.collideConnected = false;
+
+	RFlipper->listener = this;
+
+	App->physics->RFlipperJoint.enableMotor = true;
+	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
+	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD; //90 degrees per second
+
+	//Set Anchorage Point
+	(b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint); //Create Joint in the world
+
+	App->physics->RFlipperJoint.enableMotor = true;
+	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
+	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
+
 	//RFlickerJoint.enableLimit = true;
 	//RFlickerJoint.lowerAngle = -45 * DEGTORAD;
 	//RFlickerJoint.upperAngle = 45 * DEGTORAD;
-	App->physics->RFlickerJoint.enableMotor = true;
-	App->physics->RFlickerJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlickerJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
+
 
 	float trans = 1 - SCREEN_SIZE;
-	//Big Balls
-	CreateCircle(291, 175, 167 * 0.18, b2_staticBody); //Right
-	CreateCircle(211, 190, 175 * 0.18, b2_staticBody); //Left
-	CreateCircle(269, 241, 180 * 0.18, b2_staticBody); //Down
 
-	//Trampoline
-	CreateRectangle(1685*trans, 1699, 75*trans, 10, b2_staticBody); //1699 = RealY * (2 - SCREEN_SIZE) Aprox
+	//trampoline 
+
+	PhysBody* TrampolineRocket = CreateChain(0, 0, TrampolineChainVec, GetArraySize(TrampolineChain), b2_staticBody);
+	App->scene_intro->boxes.add(TrampolineRocket);
 	return true;
 }
 
@@ -142,10 +161,12 @@ update_status ModulePhysics::PostUpdate()
 			{
 				// Draw circles ------------------------------------------------
 			case b2Shape::e_circle:
-			{
+			{				
 				b2CircleShape* shape = (b2CircleShape*)f->GetShape();
+			
 				b2Vec2 pos = f->GetBody()->GetPosition();
-				App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
+				/*App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x), METERS_TO_PIXELS(pos.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);*/
+				App->renderer->DrawCircle(METERS_TO_PIXELS(pos.x + App->renderer->camera.x), METERS_TO_PIXELS(pos.y + App->renderer->camera.y), METERS_TO_PIXELS(shape->m_radius), 255, 255, 255);
 			}
 			break;
 
@@ -210,6 +231,13 @@ update_status ModulePhysics::PostUpdate()
 
 				b2Vec2 mouse_pos(PIXEL_TO_METERS(mouse_x), PIXEL_TO_METERS(mouse_y));
 
+				//for (b2Fixture* fl = RFlipper->body->GetFixtureList(); fl; fl = fl->GetNext())
+				//{
+				//	if (fl->TestPoint(mouse_pos)) {
+				//		jointed_object = RFlipper->body;
+				//		break;
+				//	}
+				//}
 				if (f->TestPoint(mouse_pos)) {
 					jointed_object = f->GetBody();
 					break;
@@ -264,7 +292,7 @@ update_status ModulePhysics::PostUpdate()
 
 
 //CREATE BODIES
-PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
+PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type, bool playerball_)
 {
 
 	b2BodyDef body;
@@ -273,24 +301,35 @@ PhysBody* ModulePhysics::CreateCircle(int x, int y, int radius, b2BodyType type)
 
 	b2Body* b = world->CreateBody(&body);
 
+	
 	b2CircleShape shape;
+
+	shape.m_radius = radius;
 	shape.m_radius = PIXEL_TO_METERS(radius);
+
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-	fixture.density = 1.0f;
+	fixture.density = 100.0f;
 
+	
 	b->CreateFixture(&fixture);
-
+	
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	if (playerball_) {
+	pbody->Type = PLAYER_BALL;// WE SET THE CREATED CIRCLES TO BALL TYPE USED IN FUNCTION BEGINNCONTACT()
+	
+	}
+	
 	b->SetUserData(pbody);
-	pbody->width = pbody->height = radius;
-
+	pbody->width = pbody->height = radius; //*SCREEN_SIZE
+	//b->CacadeVaca(body.position.x, body.position.y);
 	return pbody;
 }
 
-PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type)
+PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2BodyType type,b2Button BUTTON)
 {
+
 	b2BodyDef body;
 	body.type = type;
 	body.position.Set(PIXEL_TO_METERS(x), PIXEL_TO_METERS(y));
@@ -301,12 +340,13 @@ PhysBody* ModulePhysics::CreateRectangle(int x, int y, int width, int height, b2
 
 	b2FixtureDef fixture;
 	fixture.shape = &box;
-	fixture.density = 1.0f;
+	fixture.density = 100.0f;
 
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	pbody->Button = BUTTON;
 	b->SetUserData(pbody);
 	pbody->width = width * 0.5f;
 	pbody->height = height * 0.5f;
@@ -342,7 +382,7 @@ PhysBody* ModulePhysics::CreateRectangleSensor(int x, int y, int width, int heig
 }
 
 //Chain from v2 vertex Program to create colliders You can close it or not with ARRIBA_ESPANA bool
-PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA) //bool ARRIBA_ESPAÑA = closing or not closing the shape
+PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA, b2Button BUTTON) //bool ARRIBA_ESPAÃ‘A = closing or not closing the shape
 {
 	b2BodyDef body;
 	body.type = type;
@@ -351,19 +391,21 @@ PhysBody* ModulePhysics::CreateChain(int x, int y, b2Vec2 *vertices, int vertice
 	b2Body* b = world->CreateBody(&body);
 
 	b2ChainShape shape;
-
+	
 	if (ARRIBA_ESPANA)
 		shape.CreateLoop(vertices, vertices_size / 2);
 	else
 		shape.CreateChain(vertices, vertices_size / 2);
-	
+
 	b2FixtureDef fixture;
 	fixture.shape = &shape;
-
+	fixture.density = 1.0f;
+	
 	b->CreateFixture(&fixture);
 
 	PhysBody* pbody = new PhysBody();
 	pbody->body = b;
+	pbody->Button = BUTTON;
 	b->SetUserData(pbody);
 	pbody->width = pbody->height = 0;
 
@@ -445,6 +487,20 @@ void ModulePhysics::BeginContact(b2Contact* contact)
 
 	if(physB && physB->listener != NULL)
 		physB->listener->OnCollision(physB, physA);
+
+	/*if (physA->Type == PLAYER_BALL && physB->Type == GAME_RECTANGLE)  {
+		EffectiveCollision = true;
+	
+	}
+	else if (physA->Type == GAME_RECTANGLE && physB->Type == PLAYER_BALL) {
+		EffectiveCollision = true;
+		
+	}else if()
+		EffectiveCollision = false;*/
+	if (physA->Button == Button0 || physB->Button == Button0) {
+
+	}
+	
 }
 
 //Converts an INT array to a Vector
