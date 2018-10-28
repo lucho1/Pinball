@@ -43,7 +43,7 @@ bool ModuleSceneIntro::Start()
 
 	
 	
-	//LUCHO NO T'ESPANTIS SÓN LES LLUMS DE TOT EL PIMBALL NOMÉS PUC CONTROLAR SI ESTAN ON/OFF AMB UN PUTO BOOL. SI, M'ACABO D'ADONAR Q PODRIA HAVER FET UNA ARRAY DE BOOLS EN FIN
+	//LUCHO NO T'ESPANTIS Sï¿½N LES LLUMS DE TOT EL PIMBALL NOMï¿½S PUC CONTROLAR SI ESTAN ON/OFF AMB UN PUTO BOOL. SI, M'ACABO D'ADONAR Q PODRIA HAVER FET UNA ARRAY DE BOOLS EN FIN
 	Light1 = false;
 	Light2 = false;
 	Light3 = false;
@@ -82,7 +82,9 @@ update_status ModuleSceneIntro::Update()
 	{
 	
 		circles.add(App->physics->CreateCircle(App->input->GetMouseX(), App->input->GetMouseY(), 25,b2_dynamicBody,true));
+
 		circles.getLast()->data->listener = this;
+		LOG("MouseX: %i MouseY: %i", App->input->GetMouseX(), App->input->GetMouseY());
 	}
 
 	if(App->input->GetKey(SDL_SCANCODE_2) == KEY_DOWN)

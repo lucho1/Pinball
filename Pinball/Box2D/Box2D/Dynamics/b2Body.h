@@ -208,6 +208,8 @@ public:
 	/// @return the world transform of the body's origin.
 	const b2Transform& GetTransform() const;
 
+	void CacadeVaca(int x, int y);////ULTRA FUNCIOOOOOOOOOOOOOOOOOOOOOOOOOOOOON------------------------------------------------------
+
 	/// Get the world body origin position.
 	/// @return the world position of the body's origin.
 	const b2Vec2& GetPosition() const;
@@ -524,6 +526,11 @@ inline const b2Vec2& b2Body::GetPosition() const
 {
 	return m_xf.p;
 }
+
+inline void b2Body::CacadeVaca(int x, int y) {
+
+	m_xf.p = b2Vec2(x, y);
+} //COÑO PON UN MARCADOR AQUÍ ASÍN DE GRANDE _________________________-----------------------------------------------------------////////////////
 
 inline float32 b2Body::GetAngle() const
 {

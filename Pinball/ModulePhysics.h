@@ -59,7 +59,7 @@ public:
 	    
 	PhysBody* CreateRectangle(int x, int y, int width, int height, b2BodyType type = b2_dynamicBody,b2Button button_ = Button0);
 	PhysBody* CreateRectangleSensor(int x, int y, int width, int height);
-	PhysBody* CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA = true, b2Button BUTTON = Buttonminus1); //bool ARRIBA_ESPAÑA = closing or not closing the shape
+	PhysBody* CreateChain(int x, int y, b2Vec2 *vertices, int vertices_size, b2BodyType type, bool ARRIBA_ESPANA = true, b2Button BUTTON = Buttonminus1); //bool ARRIBA_ESPAÃ‘A = closing or not closing the shape
 
 	// b2ContactListener ---
 	void BeginContact(b2Contact* contact);
@@ -67,8 +67,8 @@ public:
 	//To pass INT array to a p2Vec2 array
 	b2Vec2* ConversionToVector(int* int_array, int size);
 	
-	b2RevoluteJointDef LFlickerJoint;
-	b2RevoluteJointDef RFlickerJoint;
+	b2RevoluteJointDef LFlipperJoint;
+	b2RevoluteJointDef RFlipperJoint;
 
 private:
 
@@ -77,6 +77,7 @@ private:
 	b2MouseJoint* mouse_joint;
 	b2Body *jointed_object;
 	b2Body* ground;
+
 public:
 
 //USED TO KNOW IF THE BALL HAS COLLIDED WITH A COLLIDER THANK OBJECT
@@ -85,5 +86,6 @@ public:
 //USED TO KNOW WICH IS THE CURRENT BALL
 	PhysBody* CurrentPlayerBall;
 
-
+	PhysBody* RFlipper = nullptr;
+	PhysBody* RMotor = nullptr;
 };
