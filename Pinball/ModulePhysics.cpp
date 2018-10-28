@@ -80,8 +80,8 @@ bool ModulePhysics::Start()
 	CreateChain(0, 0, holder_right, GetArraySize(HolderRight), b2_staticBody); //11
 
 	//Right Joint Holder-Flicker
-	//RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
-	b2BodyDef FlipBody;
+	RFlipper = CreateChain(0, 0, flicker_right, GetArraySize(FlickerRight), b2_dynamicBody); //14
+	/*b2BodyDef FlipBody;
 	FlipBody.type = b2_dynamicBody;
 	b2FixtureDef FlipFixture;
 	FlipFixture.density = 1.0f;
@@ -90,7 +90,7 @@ bool ModulePhysics::Start()
 	Flipper.Set(flicker_right, GetArraySize(FlickerRight));
 	FlipFixture.shape = &Flipper;
 	b2Body *FB = world->CreateBody(&FlipBody);
-	FB->CreateFixture(&FlipFixture);
+	FB->CreateFixture(&FlipFixture);*/
 
 	RMotor = CreateCircle(258, 620, 10, b2_staticBody);
 
@@ -106,9 +106,9 @@ bool ModulePhysics::Start()
 	//Set Anchorage Point
 	(b2RevoluteJoint*)world->CreateJoint(&RFlipperJoint); //Create Joint in the world
 
-	App->physics->RFlickerJoint.enableMotor = true;
-	App->physics->RFlickerJoint.maxMotorTorque = 10.0f;
-	App->physics->RFlickerJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
+	App->physics->RFlipperJoint.enableMotor = true;
+	App->physics->RFlipperJoint.maxMotorTorque = 10.0f;
+	App->physics->RFlipperJoint.motorSpeed = 90 * DEGTORAD;//90 degrees per second
 
 	//RFlickerJoint.enableLimit = true;
 	//RFlickerJoint.lowerAngle = -45 * DEGTORAD;
